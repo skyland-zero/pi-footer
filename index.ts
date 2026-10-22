@@ -297,6 +297,12 @@ function computeResponsiveLayout(
 // ═══════════════════════════════════════════════════════════════════════════
 
 class PromptedEditor extends CustomEditor {
+  constructor(...args: ConstructorParameters<typeof CustomEditor>) {
+    // Opt into pi's embedded status rendering (spinner in the top border, like the
+    // default editor). Without it pi falls back to a full status line above the editor.
+    super(args[0], args[1], args[2], { ...args[3], embedWorkingStatus: true });
+  }
+
   setPaddingX(_padding: number): void {
     // Reserve just enough leading space for the one prompt marker. We strip this
     // reserved space back out while rendering, so the editor itself has no extra
