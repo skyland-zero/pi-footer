@@ -54,7 +54,7 @@ export function getThinkingText(level: string): string | undefined {
 // Nerd Font icons (matching oh-my-pi exactly)
 export const NERD_ICONS: IconSet = {
   pi: "\uE22C",         // nf-oct-pi (stylized pi icon)
-  model: "\uEC19",      // nf-md-chip (model/AI chip)
+  model: "",           // no icon: the model name is self-describing
   folder: "\uF115",     // nf-fa-folder_open
   branch: "\uF126",     // nf-fa-code_fork (git branch)
   git: "\uF1D3",        // nf-fa-git (git logo)
