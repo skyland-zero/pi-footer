@@ -160,15 +160,47 @@ export const ASCII_SEPARATORS: SeparatorChars = {
   dot: ".",
 };
 
-// Detect Nerd Font support from the terminal environment
+// TERM_PROGRAM values (lower-case substrings) of terminals whose users almost always
+// have a Nerd Font configured: the terminal bundles one, or it exists to be themed.
+const NERD_TERM_PROGRAMS = [
+  "iterm", "wezterm", "kitty", "ghostty", "alacritty", "mintty", "tabby",
+  "hyper", "rio", "warp", "konsole", "gnome-terminal", "tilix", "terminator",
+  "contour", "waveterm", "vscode", "cursor", "windsurf", "zed", "tmux",
+];
+
+// Variables only set by a terminal or shell whose font is under the user's control.
+// WT_* comes from Windows Terminal (also forwarded into WSL via WSLENV), MSYSTEM and
+// MINGW_PREFIX from Git Bash and MSYS2, ConEmu* from ConEmu/Cmder.
+const NERD_ENV_MARKERS: Array<[string, string | undefined]> = [
+  ["GHOSTTY_RESOURCES_DIR", undefined], // survives into tmux children
+  ["WT_SESSION", undefined],            // Windows Terminal
+  ["WT_PROFILE_ID", undefined],         // Windows Terminal profile
+  ["MSYSTEM", undefined],               // Git Bash / MSYS2
+  ["MINGW_PREFIX", undefined],          // Git Bash / MSYS2
+  ["ConEmuANSI", "ON"],                // ConEmu / Cmder
+];
+
+/**
+ * Detect Nerd Font support from the terminal environment.
+ *
+ * No terminal can be asked which glyphs its font actually has, so this is a heuristic:
+ * a known terminal or a shell marker that implies one. Force the answer either way with
+ * `PI_FOOTER_NERD_FONTS=1` / `=0`, and replace individual glyphs via `theme.json`
+ * ("icons": { "model": "..." }).
+ */
 export function hasNerdFonts(): boolean {
-  // Check for Ghostty (survives into tmux via GHOSTTY_RESOURCES_DIR)
-  if (process.env.GHOSTTY_RESOURCES_DIR) return true;
-  
-  // Check common terminals known to support Nerd Fonts (case-insensitive)
-  const term = (process.env.TERM_PROGRAM || "").toLowerCase();
-  const nerdTerms = ["iterm", "wezterm", "kitty", "ghostty", "alacritty"];
-  return nerdTerms.some(t => term.includes(t));
+  const override = (process.env.PI_FOOTER_NERD_FONTS ?? "").trim().toLowerCase();
+  if (["1", "true", "yes", "on"].includes(override)) return true;
+  if (["0", "false", "no", "off"].includes(override)) return false;
+
+  for (const [name, expected] of NERD_ENV_MARKERS) {
+    const value = process.env[name];
+    if (value !== undefined && (expected === undefined || value === expected)) return true;
+  }
+
+  // Case-insensitive, so "WezTerm" and "vscode" both match.
+  const termProgram = (process.env.TERM_PROGRAM || "").toLowerCase();
+  return NERD_TERM_PROGRAMS.some((name) => termProgram.includes(name));
 }
 
 export function getIcons(): IconSet {
