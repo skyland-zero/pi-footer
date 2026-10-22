@@ -34,13 +34,14 @@ export const THINKING_TEXT_UNICODE: Record<string, string> = {
 };
 
 // Thinking level display text (Nerd Fonts - with icons)
+// Glyph names verified against Nerd Fonts v3.5.1 glyphnames.json
 export const THINKING_TEXT_NERD: Record<string, string> = {
-  minimal: "\u{F0E7} min",   // lightning bolt
-  low: "\u{F10C} low",       // circle outline
-  medium: "\u{F192} med",    // dot circle
-  high: "\u{F111} high",     // circle
-  xhigh: "\u{F06D} xhi",     // fire
-  max: "\u{F135} max",       // rocket
+  minimal: "\u{F0E7} min",   // nf-fa-flash
+  low: "\u{F10C} low",       // nf-fa-circle_o
+  medium: "\u{F192} med",    // nf-fa-dot_circle_o
+  high: "\u{F111} high",     // nf-fa-circle
+  xhigh: "\u{F06D} xhi",     // nf-fa-fire
+  max: "\u{F135} max",       // nf-fa-rocket
 };
 
 // Get thinking text based on font support
@@ -51,25 +52,28 @@ export function getThinkingText(level: string): string | undefined {
   return THINKING_TEXT_UNICODE[level];
 }
 
-// Nerd Font icons (matching oh-my-pi exactly)
+// Nerd Font icons (glyph names verified against Nerd Fonts v3.5.1 glyphnames.json)
+// Nerd Fonts v3 moved every nf-md-* glyph from U+F500..U+FD46 to U+F0001..U+F1AF0,
+// so pre-v3 codepoints render as tofu in current fonts. Keep names in sync with the
+// code points: the previous comments were wrong and made icon swaps a guessing game.
 export const NERD_ICONS: IconSet = {
-  pi: "\uE22C",         // nf-oct-pi (stylized pi icon)
-  model: "\u{F0674}",  // nf-md-creation (wand with sparkles)
-  folder: "\uF115",     // nf-fa-folder_open
-  branch: "\uF126",     // nf-fa-code_fork (git branch)
-  git: "\uF1D3",        // nf-fa-git (git logo)
-  tokens: "\uE26B",     // nf-seti-html (tokens symbol)
-  context: "",          // no icon: the percentage reads fine on its own
-  cost: "\uF155",       // nf-fa-dollar
-  time: "\uF017",       // nf-fa-clock_o
-  agents: "\uF0C0",     // nf-fa-users
-  cache: "\uF1C0",      // nf-fa-database (cache)
-  input: "\uF090",      // nf-fa-sign_in (input arrow)
-  output: "\uF08B",     // nf-fa-sign_out (output arrow)
-  host: "\uF109",       // nf-fa-laptop (host)
-  session: "\uF550",    // nf-md-identifier (session id)
-  auto: "\u{F0068}",    // nf-md-lightning_bolt (auto-compact)
-  warning: "\uF071",    // nf-fa-warning
+  pi: "\uE22C",          // nf-fae-pi
+  model: "\u{F0674}",    // nf-md-creation
+  folder: "\uF115",      // nf-fa-folder_open_o
+  branch: "\uF126",      // nf-fa-code_fork
+  git: "\uF1D3",         // nf-fa-git
+  tokens: "\uE26B",      // nf-fae-coins
+  context: "",           // no icon: the percentage reads fine on its own
+  cost: "\uF155",        // nf-fa-usd
+  time: "\uF017",        // nf-fa-clock_o
+  agents: "\uF0C0",      // nf-fa-users
+  cache: "\uF1C0",       // nf-fa-database
+  input: "\uF090",       // nf-fa-sign_in
+  output: "\uF08B",      // nf-fa-sign_out
+  host: "\uF109",        // nf-fa-laptop
+  session: "\u{F0EFE}",  // nf-md-identifier (v3 code point; v2 was U+F550)
+  auto: "\u{F0068}",     // nf-md-auto_fix (shown while auto-compaction is on)
+  warning: "\uF071",     // nf-fa-warning
 };
 
 // ASCII/Unicode fallback icons (matching oh-my-pi)
@@ -129,10 +133,10 @@ export interface SeparatorChars {
 }
 
 export const NERD_SEPARATORS: SeparatorChars = {
-  powerlineLeft: "\uE0B0",    // 
-  powerlineRight: "\uE0B2",   // 
-  powerlineThinLeft: "\uE0B1", // 
-  powerlineThinRight: "\uE0B3", // 
+  powerlineLeft: "\uE0B0",    // pl-left_hard_divider
+  powerlineRight: "\uE0B2",   // pl-right_hard_divider
+  powerlineThinLeft: "\uE0B1", // pl-left_soft_divider
+  powerlineThinRight: "\uE0B3", // pl-right_soft_divider
   slash: "/",
   pipe: "|",
   block: "█",
